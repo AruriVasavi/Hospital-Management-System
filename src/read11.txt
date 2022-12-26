@@ -1,0 +1,3 @@
+use node version v16.0.0
+
+vue cli versin v5.0.8
