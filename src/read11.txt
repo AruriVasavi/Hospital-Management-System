@@ -1,3 +1,12 @@
 use node version v16.0.0
 
 vue cli versin v5.0.8
+
+https://www.npmjs.com/package/@incuca/vue3-toaster
+https://github.com/MeForma/vue-toaster
+
+https://www.youtube.com/watch?v=blGp6vslw7s
+
+https://therichpost.com/vue-3-bootstrap-5-toasts-push-notifications-working-demo/
+
+https://stackoverflow.com/questions/52152342/get-the-list-of-all-selected-check-boxes-with-vue-js

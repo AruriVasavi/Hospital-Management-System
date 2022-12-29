@@ -4,72 +4,47 @@
     <h1>
         Not found
     </h1>
+ <div class='parent'>
+    <div class='child'><input type="checkbox" > Test 1</div>
+    <div class='child'> <input type="checkbox"> Test 1child 2</div>
+    <div class='child'><input type="checkbox" > Test 1</div>
+</div>
+  <!-- <div v-for="(item,ind) in test.another" :key="ind"> {{item.category}} {{item.dgid}}</div> -->
+  <div v-for="(item,ind) in test.categories" :key="ind" >
+    <p style="font-weight:bold"> {{item}} </p>
+    <div v-for="(a,ind) in test.another" :key="ind" class="row" >
+        <span v-if="a.category == item" class="col-md-2" >
+          <input  type="checkbox" :id="a.dgid" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}
+       </span>
+     </div>
+  </div>
 
-    <form class="row g-3 needs-validation" novalidate>
-  <div class="col-md-4">
-    <label for="validationCustom01" class="form-label">First name</label>
-    <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
-    <div class="valid-feedback">
-      Looks good!
-    </div>
-  </div>
-  <div class="col-md-4">
-    <label for="validationCustom02" class="form-label">Last name</label>
-    <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
-    <div class="valid-feedback">
-      Looks good!
-    </div>
-  </div>
-  <div class="col-md-4">
-    <label for="validationCustomUsername" class="form-label">Username</label>
-    <div class="input-group has-validation">
-      <span class="input-group-text" id="inputGroupPrepend">@</span>
-      <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
-      <div class="invalid-feedback">
-        Please choose a username.
+
+  <!-- <div class="accordion" id="accordionPanelsStayOpenExample">
+    <div v-for="(item,ind) in test.categories" :key="ind" class="accordion-item">
+    <h2 class="accordion-header" :id="key" >
+      <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        {{item}}
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" :aria-labelledby="key">
+      <div class="accordion-body">
+        <p>  Do not consider this span</p>
+        <span v-if="a.category == item" class="form-check form-check-inline" >
+          <input type="checkbox" class="form-check-input" id="check1" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}
+        </span>
+
+        <div class="row" v-for="(a,ind) in test.another" :key="ind">
+        <div class="col-md-4"  style="background-color:yellow;margin:0px;" v-if="a.category == item">
+          <input  type="checkbox" :id="a.dgid" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}!!
+        </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <label for="validationCustom03" class="form-label">City</label>
-    <input type="text" class="form-control" id="validationCustom03" required>
-    <div class="invalid-feedback">
-      Please provide a valid city.
-    </div>
-  </div>
-  <div class="col-md-3">
-    <label for="validationCustom04" class="form-label">State</label>
-    <select class="form-select" id="validationCustom04" required>
-      <option selected disabled value="">Choose...</option>
-      <option>...</option>
-    </select>
-    <div class="invalid-feedback">
-      Please select a valid state.
-    </div>
-  </div>
-  <div class="col-md-3">
-    <label for="validationCustom05" class="form-label">Zip</label>
-    <input type="text" class="form-control" id="validationCustom05" required>
-    <div class="invalid-feedback">
-      Please provide a valid zip.
-    </div>
-  </div>
-  <div class="col-12">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-      <label class="form-check-label" for="invalidCheck">
-        Agree to terms and conditions
-      </label>
-      <div class="invalid-feedback">
-        You must agree before submitting.
-      </div>
-    </div>
-  </div>
-  <div class="col-12">
-    <button class="btn btn-primary" type="submit">Submit form</button>
-  </div>
-</form>
+  </div> -->
 
+  <button type="button" class="btn btn-primary" @click="onSubmit()"> Submit </button>
 </div>
 </template>
 
@@ -81,6 +56,107 @@ export default{
    components: {
     HeaderBar
   },
+  data() {
+    return {
+      test:[],
+      checkedProducts:[]
+    }
+  },
+
+  mounted() {
+    let vm=this;
+    vm.test = {
+      categories: ['blood', 'misc', 'scan'],
+      another:[
+          {
+          category:'blood',
+          dgid:"dgid1",
+          testname: 'test1',
+          price:'test2'
+        },
+        {
+          category:'blood',
+          dgid:"dgid2",
+          testname: 'test2',
+          price:'test2'
+        },
+         {
+          category:'blood',
+          dgid:"dgid456",
+          testname: 'test1a',
+          price:'test2'
+        },
+        {
+          category:'blood',
+          dgid:"dgid324",
+          testname: 'test2a',
+          price:'test2'
+        },
+         {
+          category:'blood',
+          dgid:"dgid45",
+          testname: 'test1b',
+          price:'test2'
+        },
+        {
+          category:'blood',
+          dgid:"dgid65",
+          testname: 'test2b',
+          price:'test2'
+        },
+        {
+          category:'misc',
+          dgid:"dgid3",
+          testname: 'test11',
+          price:'test2'
+        },
+        {
+          category:'misc',
+          dgid:"dgid4",
+          testname: 'test22',
+          price:'test2'
+        },
+        {
+          category:'scan',
+          dgid:"dgid5",
+          testname: 'test111',
+          price:'test2'
+        },
+        {
+          category:'scan',
+          dgid:"dgid6",
+          testname: 'test222',
+          price:'test2'
+        },
+      ],
+
+    }
+    console.log(vm.test.another[0].dgid);
+  },
+  methods:{
+    onSubmit(){
+
+      console.log("on Submit clicked");
+      this.checkedProducts.forEach((a ) =>  console.log(a))
+    }
+  }
 
 }
 </script>
+
+<style scoped>
+.parent {
+  border: 1px solid black;
+  margin: 1rem;
+  padding: 2rem 2rem;
+  text-align: center;
+  display:flex;
+  align-content: center;
+}
+.child {
+  display: inline-block;
+  border: 1px solid red;
+  padding: 1rem 1rem;
+  vertical-align: middle;
+}
+</style>

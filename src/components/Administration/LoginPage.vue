@@ -53,13 +53,16 @@ export default{
 
             localStorage.setItem("user-info", JSON.stringify(this.user));
             this.$router.push({ name: 'doctorhome' });
+            //this.$toast.error(`Hey! I'm here`);
          }
          else if (email == "opa@gmail.com" && password == "Opa@123") {
              localStorage.setItem("user-info", JSON.stringify(this.user));
              this.$router.push({ name: 'ophome' });
+             //this.$toast.error(`Hey! I'm here`);
          }
          else {
              this.$router.push({ name: 'notfound' });
+             //this.$toast.error(`Hey! I'm here`);
          }
       },
       onReset() {

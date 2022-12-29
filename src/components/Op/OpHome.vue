@@ -3,6 +3,18 @@
     <HeaderBar />
     <div class="my-2" v-if = "shouldRender">
       <h1>Welcome Home</h1>
+      <div class="alert alert-success" v-if="registerSuccess" role="alert">
+        Registered successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>
+      <div class="alert alert-danger" v-if="registerFailure" role="alert">
+        Failed to register the user.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div class="alert alert-warning" v-if="registerWarning" role="alert">
+        User already registered
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       <div class="container" style="width:500px;height:100px">
         <form class="d-flex">
           <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
@@ -20,16 +32,15 @@
                   <th>Phone number </th>
                   <th> Address </th>
                   <th> Sex </th>
-                  <th> Diagnosis Doctor </th>
+                  <th> Diagnosis doctor </th>
+                  <th> Last payment date </th>
+                  <th> Valid upto </th>
                 </tr>
               </thead>
               <tbody>
                   <tr v-if="user.pid == ''">
                     <td  colspan="8" style="text-align:center">
-                      User Details not found.
-                      <!-- <a type="button" style="color:teal;"  data-bs-toggle="modal" data-bs-target="#exampleModal">
-                          Click here to Register a new patient
-                      </a> -->
+                     {{message}}
                     </td>
                   </tr>
                   <tr v-else>
@@ -40,25 +51,42 @@
                       <td>{{user.address}} </td>
                       <td>{{user.sex}} </td>
                       <td>{{user.diagnosisdoctor}} </td>
-                      <!-- <td>
-                          <button class="btn" style="background-color:teal;color:white;margin-right:3px;"> Edit </button>
-                          <button class="btn btn-danger" style="color:white"> Delete </button>
-                      </td> -->
+                      <td>{{user.lastPaymentDate}} </td>
+                      <td>{{user.validupto}} </td>
                   </tr>
               </tbody>
           </table>
 
        <div style = "display:flex;justify-content:center;">
-        <div class="card" style="width: 18rem;margin-right:10px;" v-if="user.pid && user.daysFromLastPayment <= 15">
+        <div class="card" style="width:25rem;height:15rem;text-align:center;margin-right:10px;" v-if="user.pid && user.daysFromLastPayment <= 15">
           <div class="card-body">
             <p class="card-text">Total visit from the last payment {{user.visitsAfterLastPayment}}</p>
               <button type="button" class="btn btn-success" @click="markVisit()"  :disabled="user.daysFromLastVisit == 0"> Mark Visit </button>
           </div>
         </div>
-        <div class="card" style="width: 18rem;" v-if="user.pid && (user.daysFromLastPayment >= 15 || user.visitsAfterLastPayment >= 4 )">
+        <div class="card" style="width:25rem;height:15rem;" v-if="user.pid && (user.daysFromLastPayment >= 15 || user.visitsAfterLastPayment >= 4 )" >
             <div class="card-body">
               <p class="card-text"> No of days from the last payment {{ user.daysFromLastPayment }}.</p>
-              <button type="button" class="btn btn-danger" @click="collectPayment()"  :disabled="user.daysFromLastVisit == 0"> Collect Payment </button>
+
+                 <div class="form-group row mb-3 ">
+                    <label for="modeofpayment" class="col-sm-4 col-form-label">Mode of payment</label>
+                    <div class="col-sm-8">
+                      <select v-model = "modeofpayment" class="form-select form-select mb-3" aria-label=".form-select-sm example">
+                          <option selected>Select Mode of Payment</option>
+                          <option value="Cash">Cash</option>
+                          <option value="Upi">Upi</option>
+                          <option value="CrditDebitCard">Credit/Debit card</option>
+                          <option value="None">None</option>
+                      </select>
+                    </div>
+                  </div>
+                   <div class="form-group row mb-3">
+                    <label for="Amount" class="col-sm-4 col-form-label">Amount</label>
+                    <div class="col-sm-8">
+                      <input v-model = "amount" type="number" class="form-control" placeholder="Amount">
+                    </div>
+                  </div>
+              <button type="button" class="btn btn-danger" :disabled="user.daysFromLastVisit == 0" @click="collectPayment()"  > Collect Payment </button> <!--   -->
             </div>
         </div>
       </div>
@@ -80,44 +108,88 @@
                       </ul>
                     </p>
               <form class="row g-3">
-                  <div class="col-md-6 form-floating mb-1">
-                  <input v-model = "user.name" type="text" class="form-control" id="floatingInput" placeholder="First Name" required>
-                  <label for="floatingInput"> Name</label>
+                  <div class="form-group row mb-3 mt-3">
+                    <label for="name" class="col-sm-4 col-form-label">Name</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.name" type="text" class="form-control" placeholder="Name">
+                    </div>
                   </div>
-                  <div class="col-md-6 form-floating mb-1">
-                  <input v-model = "user.age" type="number" class="form-control" id="floatingInput" placeholder="Age" required>
-                  <label for="floatingInput">Age</label>
+                  <div class="form-group row mb-3">
+                    <label for="relative" class="col-sm-4 col-form-label">S/O D/O W/O</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.relative" type="text" class="form-control" placeholder="S/O D/O W/O..">
+                    </div>
                   </div>
-                  <div class="col-md-12 form-floating mb-1">
-                  <input v-model = "user.phonenumber" type="text" class="form-control" id="floatingInput" placeholder="Phone number" required>
-                  <label for="floatingInput">Phone number</label>
+                  <div class="form-group row mb-3">
+                    <label for="Age" class="col-sm-4 col-form-label">Age</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.age" min="1" max="100" type="number" class="form-control" placeholder="Age">
+                    </div>
                   </div>
-                  <div class="col-12 form-floating mb-1">
-                  <input v-model = "user.address" type="text" class="form-control" id="floatingInput" placeholder="Address H-no, Colony" required>
-                  <label for="floatingInput">Address</label>
+                  <div class="form-group row mb-3 ">
+                    <label for="phone number" class="col-sm-4 col-form-label">Phone number</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.phonenumber" type="text" class="form-control" placeholder="Phone number">
+                    </div>
                   </div>
-                  <div class="col-md-6 mb-1">
-                  <select v-model = "user.sex" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                      <option selected>Select Sex</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Others">Others</option>
-                  </select>
+                  <div class="form-group row mb-3 ">
+                    <label for="address" class="col-sm-4 col-form-label">Address</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.address" type="text" class="form-control" placeholder="H-no, Village">
+                    </div>
                   </div>
-                  <div class="col-md-6 mb-1">
-                  <select v-model = "user.diagnosisdoctor" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                      <option selected> Select Doctor</option>
-                      <option value="DoctorA">DoctorA</option>
-                      <option value="DoctorB">DoctorB</option>
-                      <option value="DoctorC">DoctorC</option>
-                  </select>
+                  <div class="form-group row mb-3 ">
+                    <label for="city" class="col-sm-4 col-form-label">City/Town</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.city" type="text" class="form-control" placeholder="City">
+                    </div>
+                  </div>
+                  <div class="form-group row mb-3 ">
+                    <label for="sex" class="col-sm-4 col-form-label">Sex</label>
+                    <div class="col-sm-8">
+                       <select v-model = "registerUser.sex" class="form-select form-select mb-3" aria-label=".form-select-sm example">
+                          <option selected>Select Sex</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Others">Others</option>
+                      </select>
+                    </div>
+                  </div>
+                   <div class="form-group row mb-3 ">
+                    <label for="doctor" class="col-sm-4 col-form-label">Select Doctor</label>
+                    <div class="col-sm-8">
+                       <select v-model = "registerUser.diagnosisdoctor" class="form-select form-select mb-3" aria-label=".form-select-sm example">
+                          <option selected> Select Doctor</option>
+                          <option value="DoctorA">DoctorA</option>
+                          <option value="DoctorB">DoctorB</option>
+                          <option value="DoctorC">DoctorC</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row mb-3 ">
+                    <label for="modeofpayment" class="col-sm-4 col-form-label">Mode of Payment</label>
+                    <div class="col-sm-8">
+                      <select v-model = "registerUser.modeofpayment" class="form-select form-select mb-3" aria-label=".form-select-sm example">
+                          <option selected>Select Mode of Payment</option>
+                          <option value="Cash">Cash</option>
+                          <option value="Upi">Upi</option>
+                          <option value="CrditDebitCard">Credit/Debit card</option>
+                          <option value="None">None</option>
+                      </select>
+                    </div>
+                  </div>
+                   <div class="form-group row mb-3">
+                    <label for="Amount" class="col-sm-4 col-form-label">Amount</label>
+                    <div class="col-sm-8">
+                      <input v-model = "registerUser.amount" type="number" class="form-control" placeholder="Amount">
+                    </div>
                   </div>
 
               </form>
               </div>
               <div class="modal-footer">
                   <button type="button"  class="btn" style="border-color:teal" data-bs-dismiss="modal">Close</button>
-                  <button type="button" @click = "onSubmit()" data-bs-dismiss="modal"  class="btn" style="background-color:teal;color:white">Save</button>
+                  <button type="button" @click = "onSubmit()" class="btn"  style="background-color:teal;color:white">Save</button>
                   <!-- <button type="button" @click = "onSubmit()" data-bs-dismiss="modal" class="btn" style="background-color:teal;color:white">Save</button> -->
               </div>
               </div>
@@ -132,6 +204,8 @@
 <script>
 import axios from "axios";
 import HeaderBar from '../UIComponents/HeaderBar.vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js';
 export default{
   name: 'OpHome',
   components: {
@@ -139,6 +213,11 @@ export default{
   },
   data() {
     return {
+      message:'Click search for existing user and click register for new user',
+      registerSuccess: false,
+      registerFailure: false,
+      registerWarning:false,
+      //databsdismiss:'',
       errors :[],
        registrationErrors:[],
        patientId : '',
@@ -154,17 +233,28 @@ export default{
             daysFromLastPayment: 0,
             visitsAfterLastPayment: 1,
             daysFromLastVisit: 0,
+            lastPaymentDate:'',
+            validupto:''
         },
-        shouldShowErrorMessage : false,
-        shouldShowStatusDialog: false,
-        show: true,
-        endUser :[],
-        patientInfo:[
-            //{firstname: 'Test', lastname:'Test',age:10, phonenumber: '909090909', address:'test', city:'test', gender:'male', preferreddoctor:'doctor a'}
-        ],
+        registerUser: {
+            name: '',
+            age:0,
+            phonenumber:'',
+            address:'',
+            sex:'Select Sex',
+            diagnosisdoctor:'Select Doctor',
+            pid: '',
+            modeofpayment:'Select Mode of Payment',
+            amount:300,
+            relative:'',
+            city:''
+        },
+        modeofpayment:'Select Mode of Payment',
+        amount:300
      }
   },
   mounted() {
+
     let userinfo = localStorage.getItem("user-info");
     let email = '';
     let userObj = {};
@@ -172,9 +262,9 @@ export default{
       userObj = JSON.parse(userinfo);
       email = userObj.email;
       this.shouldRender = true;
-      console.log(email);
     }
     else {
+      console.log(email);
       this.shouldRender = false;
     }
   },
@@ -182,42 +272,59 @@ export default{
        async onSubmit() {
         let vm = this;
         vm.errors = [];
-        if (!vm.user.name) {
+
+        if (!vm.registerUser.name) {
           vm.errors.push('Name is required');
-          vm.user.name = '';
+          vm.registerUser.name = '';
         }
-        if (!vm.user.age) {
+        if (!vm.registerUser.age) {
           vm.errors.push('Age is required');
-          vm.user.age = '';
+          vm.registerUser.age = '';
         }
-        if (!vm.user.phonenumber) {
+        else if(vm.registerUser.age <= 0) {
+          vm.errors.push('Please give the valid age');
+          vm.registerUser.age = '';
+        }
+        if (!vm.registerUser.phonenumber) {
           vm.errors.push('Phonenumber is required');
-          vm.user.phonenumber = '';
+          vm.registerUser.phonenumber = '';
         }
-        else if(vm.user.phonenumber.length != 10) {
+        else if(vm.registerUser.phonenumber.length != 10) {
             vm.errors.push('Phone number should be 10 characters length');
-            vm.user.phonenumber = '';
+            vm.registerUser.phonenumber = '';
         }
-        if (!vm.user.address) {
+        if (!vm.registerUser.address) {
           vm.errors.push('Address is required');
-          vm.user.address = '';
+          vm.registerUser.address = '';
         }
-        if (!vm.user.sex) {
+        if (!vm.registerUser.sex) {
           vm.errors.push('Sex is required');
-          vm.user.sex = '';
+          vm.registerUser.sex = '';
         }
-        if (!vm.user.diagnosisdoctor) {
+        if (!vm.registerUser.diagnosisdoctor) {
           vm.errors.push('DiagnosisDoctor is required');
-          vm.user.diagnosisdoctor = '';
+          vm.registerUser.diagnosisdoctor = '';
+        }
+        if (!vm.registerUser.modeofpayment) {
+          vm.errors.push('Mode of payment is required');
+          vm.registerUser.modeofpayment = '';
+        }
+         if (!vm.registerUser.amount) {
+          vm.errors.push('Amount is required');
+          vm.registerUser.amount = '';
+        }
+        else if(vm.registerUser.amount < 0) {
+          vm.errors.push('Please give the valid amount');
+          vm.registerUser.amount = '';
         }
 
-        console.log(vm.errors.length);
+       // console.log(vm.errors.length);
 
         if (vm.errors.length == 0)
         {
           vm.errors = [];
           let pid = '';
-          let getAPI = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + vm.user.phonenumber;
+          let getAPI = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + vm.registerUser.phonenumber;
           await axios.get(getAPI)
             .then(response => {
               if (response != null && response.data != null)
@@ -226,37 +333,82 @@ export default{
               }});
 
           if (pid) {
-            console.log("in get ");
-            console.log(pid);
-            console.log("user already registered---");
+            vm.registerWarning = true;
           }
           else {
               let api = 'http://localhost/WebApplication1/api/PatientRegistration';
 
               let data = {
-                name: vm.user.name,
-                age: vm.user.age,
-                phonenum: vm.user.phonenumber,
-                address: vm.user.address,
-                sex: vm.user.sex,
-                diagnosisdoctor: vm.user.diagnosisdoctor
+                name: vm.registerUser.name,
+                age: vm.registerUser.age,
+                phonenum: vm.registerUser.phonenumber,
+                address: vm.registerUser.address + vm.registerUser.city,
+                sex: vm.registerUser.sex,
+                diagnosisdoctor: vm.registerUser.diagnosisdoctor,
+                modeofpayment: vm.registerUser.modeofpayment,
+                amount: vm.registerUser.amount,
+                relative:vm.registerUser.relative
               }
 
             await axios.post(api, data)
               .then(response => {
+                console.log(response.data);
                 if (response != null && response.data != null && response.data.pid != null) {
+                  vm.registerUser.pid = response.data.pid;
+                  vm.registerSuccess = true;
+
                   vm.user.pid = response.data.pid;
+                  vm.user.name = vm.registerUser.name
+                  vm.user.age = vm.registerUser.age
+                  vm.user.phonenumber = vm.registerUser.phonenumber
+                  vm.user.address = vm.registerUser.address
+                  vm.user.sex = vm.registerUser.sex
+                  vm.user.diagnosisdoctor = vm.registerUser.diagnosisdoctor
+
+
+                  //vm.user.lastPaymentDate = response.data.LastPaymentDate
+                  var result1 = new Date();
+                  let getMonth1 = result1.getMonth() + 1;
+                  vm.user.lastPaymentDate = result1.getFullYear() + '-' + getMonth1 + '-' + result1.getDate();
+
+                  var result = new Date();
+                  result.setDate(result.getDate() + 14);
+                  let getMonth = result.getMonth() + 1;
+                  vm.user.validupto = result.getFullYear() + '-' + getMonth + '-' + result.getDate();
+
+                  vm.onReset();
+                  const truck_modal = document.getElementById('exampleModal');
+                  console.log(truck_modal);
+                  const modal = bootstrap.Modal.getInstance(truck_modal);
+                  modal.hide();
                 }
                 else {
-                  vm.shouldShowErrorMessage = true;
+                  vm.registerFailure = true;
                   vm.onReset()
                 }
-                vm.shouldShowStatusDialog = true;
-              }).catch(error => { vm.shouldShowErrorMessage = true; console.log(error) });
+              }).catch(error => {
+                        console.log(error);
+                        vm.registerFailure = true;
+                });
+            }
           }
-          }
+
       },
       onReset() {
+        let vm = this;
+        vm.registerUser.pid = '';
+        vm.registerUser.name = '';
+        vm.registerUser.age = 0;
+        vm.registerUser.phonenumber = '';
+        vm.registerUser.address = '';
+        vm.registerUser.sex = 'Select Sex';
+        vm.registerUser.diagnosisdoctor = 'Select Doctor';
+        vm.registerUser.city = '';
+        vm.registerUser.amount = 300;
+        vm.registerUser.modeofpayment = 'Select Mode of Payment';
+        vm.registerUser.relative = '';
+      },
+      onGetPatientReset() {
         let vm = this;
         vm.user.pid = '';
         vm.user.name = '';
@@ -285,15 +437,29 @@ export default{
               vm.user.daysFromLastPayment = response.data.DaysFromLastPayment;
               vm.user.visitsAfterLastPayment = response.data.VisitsAfterLastPayment;
               vm.user.daysFromLastVisit = response.data.DaysFromLastVisit;
+
+              var test = response.data.LastPaymentDate;
+              //vm.user.lastPaymentDate = response.data.LastPaymentDate
+              var result1 = new Date(test);
+              let getMonth1 = result1.getMonth() + 1;
+              vm.user.lastPaymentDate = result1.getFullYear() + '-' + getMonth1 + '-' + result1.getDate();
+
+              var result = new Date(test);
+              result.setDate(result.getDate() + 14);
+              let getMonth = result.getMonth() + 1;
+              vm.user.validupto = result.getFullYear() + '-' + getMonth + '-' + result.getDate();
             }
             else
             {
-              vm.onReset();
+              vm.message = 'User details not found';
+              vm.onGetPatientReset();
             }
           }).catch(error => {
             console.log(error.response);
-            vm.onReset();
+            vm.onGetPatientReset();
           });
+
+          vm.patientId = '';
       },
 
       async markVisit() {
@@ -309,18 +475,21 @@ export default{
           console.log(response);
           if (response != null && response.status == 200) {
              vm.user.daysFromLastVisit = 0;
+             vm.user.visitsAfterLastPayment++;
           }
 
         }).catch(error => { vm.shouldShowErrorMessage = true; console.log(error) });
       },
 
       async collectPayment() {
-         let vm = this;
+        let vm = this;
         let api = 'http://localhost/WebApplication1/api/PatientVisitHis';
 
         let data = {
           pid: vm.user.pid,
           ispaid: 1,
+          modeofpayment: vm.modeofpayment,
+          amount: vm.amount
         }
        await axios.post(api, data)
         .then(response => {
@@ -328,8 +497,8 @@ export default{
                vm.user.daysFromLastVisit = 0;
                vm.user.daysFromLastPayment = 0;
                vm.user.visitsAfterLastPayment = 1;
+               vm.user.daysFromLastPayment++;
           }
-
         }).catch(error => { vm.shouldShowErrorMessage = true; console.log(error) });
       }
     }
