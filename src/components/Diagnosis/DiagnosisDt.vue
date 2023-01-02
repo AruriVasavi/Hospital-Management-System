@@ -1,87 +1,68 @@
 <template>
     <div>
         <HeaderBar />
+
+
+        <!-- {{ totalAmount }} -->
         <div style="margin:10px;">
             <h1> Hello diagnosis!! </h1>
-
                 <div style="background-color:red" v-for="item of listOfTests" :key="item">{{item}}</div>
-            <div class="container" style="width:500px;height:100px;">
-                <form class="d-flex">
-                <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
-                <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
-                </form>
-            </div>
+                <div class="container" style="width:500px;height:100px;">
+                    <form class="d-flex">
+                    <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
+                    <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
+                    </form>
+                </div>
              <div class="container-fluid">
                   <table class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>PID</th>
-                  <th>Name</th>
-                  <th>Age </th>
-                  <th>Phone number </th>
-                  <th> Address </th>
-                  <th> Sex </th>
-                  <th> Diagnosis doctor </th>
-                  <th> Last payment date </th>
-                  <th> Valid upto </th>
-                </tr>
-              </thead>
-              <tbody>
-                  <tr v-if="user.pid == ''">
-                    <td  colspan="8" style="text-align:center">
-                     {{message}}
-                    </td>
-                  </tr>
-                  <tr v-else>
-                      <td>{{user.pid}} </td>
-                      <td>{{user.name}} </td>
-                      <td>{{user.age }}</td>
-                      <td>{{user.phonenumber }}</td>
-                      <td>{{user.address}} </td>
-                      <td>{{user.sex}} </td>
-                      <td>{{user.diagnosisdoctor}} </td>
-                      <td>{{user.lastPaymentDate}} </td>
-                      <td>{{user.validupto}} </td>
-                  </tr>
-              </tbody>
+                    <thead>
+                        <tr>
+                        <th>PID</th>
+                        <th>Name</th>
+                        <th>Age </th>
+                        <th>Phone number </th>
+                        <th> Address </th>
+                        <th> Sex </th>
+                        <th> Diagnosis doctor </th>
+                        <th> Last payment date </th>
+                        <th> Valid upto </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="user.pid == ''">
+                            <td  colspan="8" style="text-align:center">
+                            {{message}}
+                            </td>
+                        </tr>
+                        <tr v-else>
+                            <td>{{user.pid}} </td>
+                            <td>{{user.name}} </td>
+                            <td>{{user.age }}</td>
+                            <td>{{user.phonenumber }}</td>
+                            <td>{{user.address}} </td>
+                            <td>{{user.sex}} </td>
+                            <td>{{user.diagnosisdoctor}} </td>
+                            <td>{{user.lastPaymentDate}} </td>
+                            <td>{{user.validupto}} </td>
+                        </tr>
+                    </tbody>
                   </table>
              </div>
-            <!-- <form>
-                <div class="accordion" id="accordionPanelsStayOpenExample">
+             <div v-if="shouldShow">
+               <div class="accordion" id="accordionPanelsStayOpenExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                         <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            Accordion Item #1
+                            Blood
                         </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
                             <div class="accordion-body">
                                 <div class="row">
+                                    <div v-for="(item, ind) in bloodCategories" :key="ind" class="col-md-3" >
                                     <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
+                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                </div>
-                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
                                     </div>
                                 </div>
                             </div>
@@ -90,107 +71,66 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                         <button class="accordion-button" style="background-color:#b3e0dc;color:teal"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Accordion Item #2
+                            Scan
                         </button>
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
                             <div class="accordion-body">
                                 <div class="row">
+                                <div v-for="(item, ind) in scanCategories" :key="ind" class="col-md-3" >
                                     <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
+                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
                                     </div>
                                 </div>
-                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                 <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                                    Accordion Item #3
+                                Misc
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
                             <div class="accordion-body">
                                 <div class="row">
+                                    <div v-for="(item, ind) in miscCategories" :key="ind" class="col-md-3" >
                                     <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
+                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                </div>
-                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something"> Option 1
                                     </div>
                                 </div>
                             </div>
                         </div>
                         </div>
+                        </div>
+               </div>
+             </div>
+
+            <button  type="button" class="btn mt-3" style="background-color:teal;color:white" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="totalSum">
+                 Check Price
+            </button>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirm Price</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-
-
-
-            </form> -->
-
-            <div class="accordion" id="accordionPanelsStayOpenExample"  v-if="shouldShow">
-                <div class="accordion-item" v-for="(item,index) in listofTests" :key="index">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                    <button style="background-color:#b3e0dc;color:teal" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                        {{item}}
-                    </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                    <div class="accordion-body">
-                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                            <!-- <div v-for="(z,x) in "> </div> -->
+                    <div class="modal-body">
+                        <p> Total Amount: {{totalPrice}} </p>
+                        Are you sure you want to proceed?
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
-             <div v-if="shouldShow">
-                    <!-- <div v-for="(item,index) in listofTests" :key="index" style="background-color:red;"> {{item}} </div> -->
-                    <div v-for="(item,index) in listofTests" :key="index" style="background-color:red;"> {{item}} </div>
+        </div>
 
-            </div>
+
         </div>
     </div>
 </template>
@@ -202,12 +142,132 @@ export default{
   components: {
     HeaderBar
   },
+
+  mounted() {
+    let vm = this;
+     vm.refinedTest = {
+      info:[
+        {
+          category:'blood',
+          dgid:"dgid1",
+          testname: 'test1',
+          price:10
+        },
+        {
+          category:'blood',
+          dgid:"dgid2",
+          testname: 'test2',
+          price:20
+        },
+         {
+          category:'blood',
+          dgid:"dgid456",
+          testname: 'test1a',
+          price:30
+        },
+        {
+          category:'blood',
+          dgid:"dgid324",
+          testname: 'test2a',
+          price:40
+        },
+         {
+          category:'blood',
+          dgid:"dgid45",
+          testname: 'test1b',
+          price:50
+        },
+        {
+          category:'blood',
+          dgid:"dgid65",
+          testname: 'test2b',
+          price:60
+        },
+         {
+          category:'blood',
+          dgid:"dgid11324",
+          testname: 'test2a',
+          price:70
+        },
+         {
+          category:'blood',
+          dgid:"dgid1145",
+          testname: 'test1b',
+          price:80
+        },
+        {
+          category:'blood',
+          dgid:"dgid2265",
+          testname: 'test2b',
+          price:90
+        },
+        {
+          category:'misc',
+          dgid:"dgid3",
+          testname: 'test11',
+          price:100
+        },
+        {
+          category:'misc',
+          dgid:"dgid4",
+          testname: 'test22',
+          price:110
+        },
+        {
+          category:'scan',
+          dgid:"dgid5",
+          testname: 'test111',
+          price:120
+        },
+        {
+          category:'scan',
+          dgid:"dgid6",
+          testname: 'test222',
+          price:130
+        },
+      ],
+    }
+
+    for(let i = 0; i< vm.refinedTest.info.length; i++) {
+      if (vm.refinedTest.info[i].category == "scan") {
+        vm.scanCategories.push(vm.refinedTest.info[i]);
+      }
+      if (vm.refinedTest.info[i].category == "misc") {
+        vm.miscCategories.push(vm.refinedTest.info[i]);
+      }
+      if (vm.refinedTest.info[i].category == "blood") {
+         vm.bloodCategories.push(vm.refinedTest.info[i]);
+      }
+    }
+  },
+  computed: {
+    // totalAmount() {
+    //     let vm = this;
+    //     console.log(vm.refinedTest.info.length);
+    //     for (let i = 0; i< vm.refinedTest.info.length; i++)
+    //     {
+    //         for (let j = 0; j < vm.checkedProducts.length; j++) {
+    //             if (vm.checkedProducts[j] == vm.refinedTest.info[i].dgid) {
+    //                 vm.totalPrice = vm.totalPrice + vm.refinedTest.info[i].price;
+    //             }
+    //         }
+    //      }
+
+    //     return vm.totalPrice;
+    // }
+  },
   data(){
     return{
         message:'Click search for existing user and click register for new user',
         patientId:'',
         listOfTests:[],
-        shouldShow:false,
+        shouldShow:true,
+        refinedTest:[],
+        bloodCategories:[],
+        miscCategories:[],
+        scanCategories:[],
+        checkedProducts:[],
+        totalPrice:0,
         user: {
             name: '',
             age:1,
@@ -224,7 +284,6 @@ export default{
         },
         shouldGetDiagnosisInfo:false,
         testInfo:[],
-
     }
   },
   methods:{
@@ -320,6 +379,18 @@ export default{
         vm.user.sex = 'Select Sex';
         vm.user.diagnosisdoctor = 'Select Doctor';
       },
+      totalSum() {
+        let vm = this;
+        vm.totalPrice = 0;
+        for (let i = 0; i< vm.refinedTest.info.length; i++){
+        for (let j = 0; j < vm.checkedProducts.length; j++) {
+            if (vm.checkedProducts[j] == vm.refinedTest.info[i].dgid) {
+                vm.totalPrice = vm.totalPrice + vm.refinedTest.info[i].price;
+                console.log(vm.totalPrice);
+            }
+        }
+        }
+      }
   }
 }
 </script>

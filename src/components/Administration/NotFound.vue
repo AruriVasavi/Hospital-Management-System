@@ -4,47 +4,66 @@
     <h1>
         Not found
     </h1>
- <div class='parent'>
-    <div class='child'><input type="checkbox" > Test 1</div>
-    <div class='child'> <input type="checkbox"> Test 1child 2</div>
-    <div class='child'><input type="checkbox" > Test 1</div>
-</div>
-  <!-- <div v-for="(item,ind) in test.another" :key="ind"> {{item.category}} {{item.dgid}}</div> -->
-  <div v-for="(item,ind) in test.categories" :key="ind" >
-    <p style="font-weight:bold"> {{item}} </p>
-    <div v-for="(a,ind) in test.another" :key="ind" class="row" >
-        <span v-if="a.category == item" class="col-md-2" >
-          <input  type="checkbox" :id="a.dgid" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}
-       </span>
-     </div>
-  </div>
-
-
-  <!-- <div class="accordion" id="accordionPanelsStayOpenExample">
-    <div v-for="(item,ind) in test.categories" :key="ind" class="accordion-item">
-    <h2 class="accordion-header" :id="key" >
-      <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-        {{item}}
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" :aria-labelledby="key">
-      <div class="accordion-body">
-        <p>  Do not consider this span</p>
-        <span v-if="a.category == item" class="form-check form-check-inline" >
-          <input type="checkbox" class="form-check-input" id="check1" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}
-        </span>
-
-        <div class="row" v-for="(a,ind) in test.another" :key="ind">
-        <div class="col-md-4"  style="background-color:yellow;margin:0px;" v-if="a.category == item">
-          <input  type="checkbox" :id="a.dgid" :name="a.dgid" :value="a.dgid" v-model="checkedProducts"> {{a.testname}}!!
-        </div>
-        </div>
+   <!-- <div class="accordion" id="accordionPanelsStayOpenExample">
+      <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+          <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+              Blood
+          </button>
+          </h2>
+          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+              <div class="accordion-body">
+                <div class="row">
+                    <div v-for="(item, ind) in bloodCategories" :key="ind" class="col-md-3" >
+                      <div class="col-md-3">
+                          <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                      </div>
+                    </div>
+                </div>
+              </div>
+          </div>
       </div>
-    </div>
-  </div>
-  </div> -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+        <button class="accordion-button" style="background-color:#b3e0dc;color:teal"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+            Scan
+        </button>
+        </h2>
+        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+            <div class="accordion-body">
+                <div class="row">
+                   <div v-for="(item, ind) in scanCategories" :key="ind" class="col-md-3" >
+                      <div class="col-md-3">
+                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                   Misc
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+            <div class="accordion-body">
+                <div class="row">
+                    <div v-for="(item, ind) in miscCategories" :key="ind" class="col-md-3" >
+                      <div class="col-md-3">
+                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div> -->
 
-  <button type="button" class="btn btn-primary" @click="onSubmit()"> Submit </button>
+
+
+  <!-- <button type="button" class="btn btn-primary" @click="onSubmit()"> Submit </button> -->
 </div>
 </template>
 
@@ -59,16 +78,20 @@ export default{
   data() {
     return {
       test:[],
+      refinedTest:[],
+      bloodCategories:[],
+      miscCategories:[],
+      scanCategories:[],
       checkedProducts:[]
     }
   },
 
   mounted() {
     let vm=this;
-    vm.test = {
-      categories: ['blood', 'misc', 'scan'],
-      another:[
-          {
+
+    vm.refinedTest = {
+      info:[
+        {
           category:'blood',
           dgid:"dgid1",
           testname: 'test1',
@@ -104,6 +127,24 @@ export default{
           testname: 'test2b',
           price:'test2'
         },
+         {
+          category:'blood',
+          dgid:"dgid11324",
+          testname: 'test2a',
+          price:'test2'
+        },
+         {
+          category:'blood',
+          dgid:"dgid1145",
+          testname: 'test1b',
+          price:'test2'
+        },
+        {
+          category:'blood',
+          dgid:"dgid2265",
+          testname: 'test2b',
+          price:'test2'
+        },
         {
           category:'misc',
           dgid:"dgid3",
@@ -129,10 +170,23 @@ export default{
           price:'test2'
         },
       ],
-
     }
-    console.log(vm.test.another[0].dgid);
+
+   for(let i = 0; i< vm.refinedTest.info.length; i++) {
+      if (vm.refinedTest.info[i].category == "scan") {
+        vm.scanCategories.push(vm.refinedTest.info[i]);
+      }
+      if (vm.refinedTest.info[i].category == "misc") {
+        vm.miscCategories.push(vm.refinedTest.info[i]);
+      }
+      if (vm.refinedTest.info[i].category == "blood") {
+         vm.bloodCategories.push(vm.refinedTest.info[i]);
+      }
+    }
   },
+   // console.log(vm.test.another[0].dgid);
+
+
   methods:{
     onSubmit(){
 
@@ -152,6 +206,7 @@ export default{
   text-align: center;
   display:flex;
   align-content: center;
+  max-width:500px;
 }
 .child {
   display: inline-block;
