@@ -58,17 +58,53 @@
           </table>
 
        <div style = "display:flex;justify-content:center;">
-        <div class="card" style="width:25rem;height:15rem;text-align:center;margin-right:10px;" v-if="user.pid && user.daysFromLastPayment <= 15">
+        <div class="card" style="text-align:center;margin-right:10px;" v-if="user.pid && user.daysFromLastPayment <= 15">
           <div class="card-body">
             <p class="card-text">Total visit from the last payment {{user.visitsAfterLastPayment}}</p>
-              <button type="button" class="btn btn-success" @click="markVisit()"  :disabled="user.daysFromLastVisit == 0"> Mark Visit </button>
+              <!-- <button type="button" class="btn btn-success" :disabled="user.daysFromLastVisit == 0" @click="markVisit()" > Mark Visit </button> -->
+              <button type="button" class="btn" style="background-color:teal;color:white" :disabled="user.daysFromLastVisit == 0" data-bs-toggle="modal" data-bs-target="#markVisitModal">
+                Mark Visit
+              </button>
           </div>
         </div>
-        <div class="card" style="width:25rem;height:15rem;" v-if="user.pid && (user.daysFromLastPayment >= 15 || user.visitsAfterLastPayment >= 4 )" >
+        <div class="card" v-if="user.pid && (user.daysFromLastPayment >= 15 || user.visitsAfterLastPayment >= 4 )">
             <div class="card-body">
               <p class="card-text"> No of days from the last payment {{ user.daysFromLastPayment }}.</p>
+                  <button type="button" class="btn btn-danger" :disabled="user.daysFromLastVisit == 0" data-bs-toggle="modal" data-bs-target="#collectPaymentModal">
+                    Collect Payment
+                  </button>
+            </div>
+        </div>
+      </div>
+      </div>
 
-                 <div class="form-group row mb-3 ">
+      <div class="modal fade" id="markVisitModal" tabindex="-1" aria-labelledby="markVisitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="markVisitModalLabel">Confirm Mark Visist</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+             Are you sure you want to proced?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              <button type="button" class="btn" style="background-color:teal;color:white;" @click="markVisit()">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="collectPaymentModal" tabindex="-1" aria-labelledby="collectPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="collectPaymentModal">Collect Payment</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group row mb-3 ">
                     <label for="modeofpayment" class="col-sm-4 col-form-label">Mode of payment</label>
                     <div class="col-sm-8">
                       <select v-model = "modeofpayment" class="form-select form-select mb-3" aria-label=".form-select-sm example">
@@ -86,11 +122,13 @@
                       <input v-model = "amount" type="number" class="form-control" placeholder="Amount">
                     </div>
                   </div>
-              <button type="button" class="btn btn-danger" :disabled="user.daysFromLastVisit == 0" @click="collectPayment()"  > Collect Payment </button> <!--   -->
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" @click="collectPayment()">Save changes</button>
+            </div>
+          </div>
         </div>
-      </div>
-
       </div>
 
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -475,6 +513,10 @@ export default{
           console.log(response);
           if (response != null && response.status == 200) {
              vm.user.daysFromLastVisit = 0;
+             const markvisit_modal = document.getElementById('markVisitModal');
+                 // console.log(markvisit_modal);
+                  const modal = bootstrap.Modal.getInstance(markvisit_modal);
+                  modal.hide();
              vm.user.visitsAfterLastPayment++;
           }
 
@@ -497,6 +539,11 @@ export default{
                vm.user.daysFromLastVisit = 0;
                vm.user.daysFromLastPayment = 0;
                vm.user.visitsAfterLastPayment = 1;
+
+                const collectpayment_modal = document.getElementById('collectPaymentModal');
+                 // console.log(markvisit_modal);
+                  const modal = bootstrap.Modal.getInstance(collectpayment_modal);
+                  modal.hide();
                vm.user.daysFromLastPayment++;
           }
         }).catch(error => { vm.shouldShowErrorMessage = true; console.log(error) });
