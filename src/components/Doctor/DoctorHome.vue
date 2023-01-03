@@ -1,9 +1,29 @@
 <template>
     <div>
        <HeaderBar />
-      <div class="mt-3">
-        <h1> Welcome to Doctor's Home </h1>
-        <div style = "display:flex;justify-content:center;">
+      <div>
+        <div class="row">
+        <div class="col-sm-2" style="height:100vh;width:200px;background-color:#b3e0dc">
+            <div class="nav nav-item active" @click="patientInfoRoute" >
+              OP
+            </div>
+            <div class="nav nav-item" @click="scanHomeRoute">
+               Scan
+            </div>
+            <div class="nav nav-item">
+               Billing
+            </div>
+            <div class="nav nav-item">
+               Lab
+            </div>
+            <div class="nav nav-item">
+               Discharges
+            </div>
+        </div>
+        <div class="col-sm-10">
+           <h3 class="mt-2"> Welcome Doctor </h3>
+           Op details goes here
+            <div style = "display:flex;justify-content:center;">
           <div class="card card-custom" @click="patientInfoRoute">
             <div class="card-body" style="padding:50px;">
               OP
@@ -30,6 +50,9 @@
             </div>
           </div>
        </div>
+        </div>
+        </div>
+
       </div>
     </div>
 </template>
@@ -50,19 +73,23 @@ export default {
   methods:{
     patientInfoRoute() {
        this.$router.push({ name: 'patientinfo' });
+    },
+    scanHomeRoute() {
+       this.$router.push({ name: 'scanhome' });
     }
   }
 }
 </script>
 
 <style scoped>
-.card-custom{
-margin-right:10px;
-cursor:pointer;
-width:290px;
-background-image:linear-gradient(to right, teal , #00bde7,#005b6d);
-color:white;
-font-weight: 300;
-font-size:25px;
+
+
+.nav-item{
+  padding:10px;
+  cursor:pointer;
+}
+.active {
+    font-weight: 600;
+    color:teal;
 }
 </style>

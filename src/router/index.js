@@ -5,6 +5,7 @@ import NotFound from '../components/Administration/NotFound.vue';
 import OpHome from '../components/Op/OpHome.vue';
 import DoctorHome from '../components/Doctor/DoctorHome.vue';
 import PatientInfo from '../components/Doctor/PatientInfo.vue';
+import ScanHome from '../components/Doctor/ScanHome.vue';
 import DiagnosisDt from '../components/Diagnosis/DiagnosisDt.vue';
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/patientinfo',
     name: 'patientinfo',
     component:PatientInfo
+  },
+  {
+    path: '/scanhome',
+    name: 'scanhome',
+    component:ScanHome
   },
   {
     path: '/diagnosishome',
