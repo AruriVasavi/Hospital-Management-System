@@ -2,11 +2,13 @@
     <div>
        <HeaderBar />
        <!-- <SideBar /> -->
+
       <div>
-        <button class="btn btn-primary">Save</button>
+        <button  class="btn btn-primary mt-3" style="float:right;" @click="doctorHomeRoute"> Go back to Home </button>
       </div>
       <div class="container-fluid">
-          <h1 class="mt-4"> Welcome to doctor home </h1>
+          <h1 class="mt-5"> Welcome to doctor home </h1>
+
               <table class="table table-hover table-bordered mt-5" id="myTable">
                   <thead>
                       <tr>
@@ -57,6 +59,9 @@ export default {
 
 
         }).catch(error => console.log(error.response));
+    },
+    doctorHomeRoute() {
+      this.$router.push({ name: 'doctorhome' });
     }
   }
 }

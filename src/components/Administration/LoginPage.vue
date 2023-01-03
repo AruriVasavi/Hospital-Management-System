@@ -33,6 +33,7 @@ export default{
         user: {
             email: '',
             password: '',
+            role:''
         },
         show: true,
         endUser :[],
@@ -50,15 +51,21 @@ export default{
          let password = this.user.password;
 
          if (email == "doctora@gmail.com" && password == "Doctora@123") {
-
+            this.user.role = 11;
             localStorage.setItem("user-info", JSON.stringify(this.user));
             this.$router.push({ name: 'doctorhome' });
             //this.$toast.error(`Hey! I'm here`);
          }
          else if (email == "opa@gmail.com" && password == "Opa@123") {
+             this.user.role = 22;
              localStorage.setItem("user-info", JSON.stringify(this.user));
              this.$router.push({ name: 'ophome' });
              //this.$toast.error(`Hey! I'm here`);
+         }
+         else if(email == "diagnosis@gmail.com" && password == "Diagnosis@123") {
+                this.user.role = 33;
+                localStorage.setItem("user-info", JSON.stringify(this.user));
+                this.$router.push({ name: 'diagnosishome' });
          }
          else {
              this.$router.push({ name: 'notfound' });

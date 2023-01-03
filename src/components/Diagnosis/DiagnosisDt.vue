@@ -2,135 +2,147 @@
     <div>
         <HeaderBar />
 
-
-        <!-- {{ totalAmount }} -->
-        <div style="margin:10px;">
-            <h1> Hello diagnosis!! </h1>
-                <div style="background-color:red" v-for="item of listOfTests" :key="item">{{item}}</div>
-                <div class="container" style="width:500px;height:100px;">
-                    <form class="d-flex">
-                    <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
-                    <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
-                    </form>
+        <div class="my-2" v-if = "shouldRender">
+          <div style="margin:10px;">
+              <h1> Hello diagnosis!! </h1>
+                  <div style="background-color:red" v-for="item of listOfTests" :key="item">{{item}}</div>
+                  <div class="container" style="width:500px;height:100px;">
+                      <form class="d-flex">
+                      <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
+                      <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
+                      </form>
+                  </div>
+                   <div class="container-fluid">
+                    <table class="table table-hover table-bordered">
+                      <thead>
+                          <tr>
+                          <th>PID</th>
+                          <th>Name</th>
+                          <th>Age </th>
+                          <th>Phone number </th>
+                          <th> Address </th>
+                          <th> Sex </th>
+                          <th> Diagnosis doctor </th>
+                          <th> Last payment date </th>
+                          <th> Valid upto </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-if="user.pid == ''">
+                              <td  colspan="8" style="text-align:center">
+                              {{message}}
+                              </td>
+                          </tr>
+                          <tr v-else>
+                              <td>{{user.pid}} </td>
+                              <td>{{user.name}} </td>
+                              <td>{{user.age }}</td>
+                              <td>{{user.phonenumber }}</td>
+                              <td>{{user.address}} </td>
+                              <td>{{user.sex}} </td>
+                              <td>{{user.diagnosisdoctor}} </td>
+                              <td>{{user.lastPaymentDate}} </td>
+                              <td>{{user.validupto}} </td>
+                          </tr>
+                      </tbody>
+                    </table>
+              </div>
+              <div v-if="shouldShow">
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                      <div class="accordion-item">
+                          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                          <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                              Blood
+                          </button>
+                          </h2>
+                          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                              <div class="accordion-body">
+                                  <div class="row">
+                                      <div v-for="(item, ind) in bloodCategories" :key="ind" class="col-md-3" >
+                                      <div class="col-md-3">
+                                          <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                                      </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="accordion-item">
+                          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                          <button class="accordion-button" style="background-color:#b3e0dc;color:teal"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                              Scan
+                          </button>
+                          </h2>
+                          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+                              <div class="accordion-body">
+                                  <div class="row">
+                                  <div v-for="(item, ind) in scanCategories" :key="ind" class="col-md-3" >
+                                      <div class="col-md-3">
+                                          <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                                      </div>
+                                  </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="accordion-item">
+                              <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                  <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                  Misc
+                                  </button>
+                              </h2>
+                              <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+                              <div class="accordion-body">
+                                  <div class="row">
+                                      <div v-for="(item, ind) in miscCategories" :key="ind" class="col-md-3" >
+                                      <div class="col-md-3">
+                                          <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
+                                      </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          </div>
+                          </div>
                 </div>
-             <div class="container-fluid">
-                  <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                        <th>PID</th>
-                        <th>Name</th>
-                        <th>Age </th>
-                        <th>Phone number </th>
-                        <th> Address </th>
-                        <th> Sex </th>
-                        <th> Diagnosis doctor </th>
-                        <th> Last payment date </th>
-                        <th> Valid upto </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-if="user.pid == ''">
-                            <td  colspan="8" style="text-align:center">
-                            {{message}}
-                            </td>
-                        </tr>
-                        <tr v-else>
-                            <td>{{user.pid}} </td>
-                            <td>{{user.name}} </td>
-                            <td>{{user.age }}</td>
-                            <td>{{user.phonenumber }}</td>
-                            <td>{{user.address}} </td>
-                            <td>{{user.sex}} </td>
-                            <td>{{user.diagnosisdoctor}} </td>
-                            <td>{{user.lastPaymentDate}} </td>
-                            <td>{{user.validupto}} </td>
-                        </tr>
-                    </tbody>
-                  </table>
-             </div>
-             <div v-if="shouldShow">
-               <div class="accordion" id="accordionPanelsStayOpenExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            Blood
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                <div class="row">
-                                    <div v-for="(item, ind) in bloodCategories" :key="ind" class="col-md-3" >
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
-                                    </div>
-                                    </div>
-                                </div>
+                 <button :disabled = "checkedProducts.length == 0"  type="button" class="btn mt-3" style="background-color:teal;color:white" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="totalSum">
+                  Collect payment
+                 </button>
+              </div>
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Collect Payment</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <p> Total Amount: {{totalPrice}} </p>
+                          <form class="row g-3">
+                            <div class="form-group  mb-3 mt-3">
+                              <input type="checkbox" class="form-check-input" style="margin-right:10px;"  v-model="isActualAmountSameasTakenAmount"> Amount received is same as actual amount
                             </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                        <button class="accordion-button" style="background-color:#b3e0dc;color:teal"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Scan
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                <div class="row">
-                                <div v-for="(item, ind) in scanCategories" :key="ind" class="col-md-3" >
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                                <button class="accordion-button" style="background-color:#b3e0dc;color:teal" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                                Misc
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                                <div class="row">
-                                    <div v-for="(item, ind) in miscCategories" :key="ind" class="col-md-3" >
-                                    <div class="col-md-3">
-                                        <input type="checkbox" class="form-check-input" :id="item.dgid" :name="item.dgid" :value="item.dgid" v-model="checkedProducts"> {{item.testname}}
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        </div>
-               </div>
-             </div>
+                              <div class="form-group row mb-3 mt-3">
+                                <label for="name" class="col-sm-4 col-form-label">Amount Received</label>
+                                  <div class="col-sm-8">
+                                    <input v-if="isActualAmountSameasTakenAmount" :disabled = "isActualAmountSameasTakenAmount" v-model = "takenAmount" type="number" class="form-control" :placeholder="totalPrice">
+                                    <input v-else  v-model = "takenAmount" type="number" class="form-control" placeholder="Amount Received">
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
-            <button  type="button" class="btn mt-3" style="background-color:teal;color:white" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="totalSum">
-                 Check Price
-            </button>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Confirm Price</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p> Total Amount: {{totalPrice}} </p>
-                        Are you sure you want to proceed?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-
-
+        <div class="my-2" v-else>
+          Please login
         </div>
     </div>
 </template>
@@ -145,6 +157,17 @@ export default{
 
   mounted() {
     let vm = this;
+    let userinfo = localStorage.getItem("user-info");
+    let role = '';
+    let userObj = {};
+    if (userinfo != null) {
+      userObj = JSON.parse(userinfo);
+      role = userObj.role;
+      if (role == 33) {
+      this.shouldRender = true;
+      }
+    }
+
      vm.refinedTest = {
       info:[
         {
@@ -259,9 +282,11 @@ export default{
   data(){
     return{
         message:'Click search for existing user and click register for new user',
+        isActualAmountSameasTakenAmount:false,
         patientId:'',
+        shouldRender :false,
         listOfTests:[],
-        shouldShow:true,
+        shouldShow:false,
         refinedTest:[],
         bloodCategories:[],
         miscCategories:[],
@@ -359,7 +384,7 @@ export default{
 
                 }
                 vm.shouldShow = true;
-                vm.testInfo.forEach(a => console.log(a));
+                // vm.testInfo.forEach(a => console.log(a));
             }
 
            // console.log('outside');
@@ -394,3 +419,4 @@ export default{
   }
 }
 </script>
+

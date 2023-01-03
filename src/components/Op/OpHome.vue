@@ -235,7 +235,7 @@
       </div>
 
     </div>
-    <div v-else> Please login</div>
+    <div class="my-2" v-else> Please login</div>
   </div>
 </template>
 
@@ -294,17 +294,22 @@ export default{
   mounted() {
 
     let userinfo = localStorage.getItem("user-info");
-    let email = '';
+    let role = '';
     let userObj = {};
     if (userinfo != null) {
       userObj = JSON.parse(userinfo);
-      email = userObj.email;
-      this.shouldRender = true;
+      role = userObj.role;
+      if (role == 22) {
+        this.shouldRender = true;
+       }
+      // else {
+      //   this.shouldRender = false;
+      // }
     }
-    else {
-      console.log(email);
-      this.shouldRender = false;
-    }
+    // else {
+    //   console.log(role);
+    //   this.shouldRender = false;
+    // }
   },
   methods: {
        async onSubmit() {

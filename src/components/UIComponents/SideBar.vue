@@ -1,14 +1,18 @@
 <template>
     <div>
-        <h1> Side bar </h1>
-        <nav>
-            <ul>
-                <li> <a href="#"> <span style="color:black"> Home </span> </a>    </li>
-                <li> <a href="#"> <span style="color:black"> About us </span> </a>    </li>
-                <li> <a href="#"> <span style="color:black"> Services </span> </a>    </li>
-                <li> <a href="#"> <span style="color:black"> Dummy </span> </a>    </li>
-            </ul>
-        </nav>
+
+        <div class="row">
+            <div class="col-md-2"> Nav items</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"> Nav items</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"> Nav items</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"> Nav items</div>
+        </div>
     </div>
 </template>
 
