@@ -20,6 +20,7 @@
           <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
           <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
           <button class="btn btn-primary" style="color:white;margin-left:7px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</button>
+          <button :disabled="shouldDisablePrint"  class="btn btn-success " style="color:white;margin-left:7px;"  type="button" @click = "print()">Print</button>
         </form>
       </div>
       <div class="container-fluid">
@@ -255,11 +256,13 @@ export default{
       registerSuccess: false,
       registerFailure: false,
       registerWarning:false,
+      shouldDisablePrint: true,
       //databsdismiss:'',
       errors :[],
        registrationErrors:[],
        patientId : '',
        shouldRender:false,
+       //shouldPrint:true,
         user: {
             name: '',
             age:1,
@@ -302,14 +305,7 @@ export default{
       if (role == 22) {
         this.shouldRender = true;
        }
-      // else {
-      //   this.shouldRender = false;
-      // }
     }
-    // else {
-    //   console.log(role);
-    //   this.shouldRender = false;
-    // }
   },
   methods: {
        async onSubmit() {
@@ -360,9 +356,6 @@ export default{
           vm.errors.push('Please give the valid amount');
           vm.registerUser.amount = '';
         }
-
-       // console.log(vm.errors.length);
-
         if (vm.errors.length == 0)
         {
           vm.errors = [];
@@ -424,6 +417,8 @@ export default{
                   console.log(truck_modal);
                   const modal = bootstrap.Modal.getInstance(truck_modal);
                   modal.hide();
+
+                  vm.shouldDisablePrint = false;
                 }
                 else {
                   vm.registerFailure = true;
@@ -436,6 +431,12 @@ export default{
             }
           }
 
+      },
+
+      print() {
+        localStorage.setItem("patient-info", JSON.stringify(this.user));
+        const routeData = this.$router.resolve({name: 'print'});
+        window.open(routeData.href, '_blank');
       },
       onReset() {
         let vm = this;
@@ -464,6 +465,7 @@ export default{
       async searchPatient()
       {
         let vm = this;
+        vm.shouldDisablePrint = true;
         let api = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + this.patientId;
 
           await axios.get(api)
@@ -482,6 +484,7 @@ export default{
               vm.user.daysFromLastVisit = response.data.DaysFromLastVisit;
 
               var test = response.data.LastPaymentDate;
+
               //vm.user.lastPaymentDate = response.data.LastPaymentDate
               var result1 = new Date(test);
               let getMonth1 = result1.getMonth() + 1;
@@ -491,7 +494,8 @@ export default{
               result.setDate(result.getDate() + 14);
               let getMonth = result.getMonth() + 1;
               vm.user.validupto = result.getFullYear() + '-' + getMonth + '-' + result.getDate();
-            }
+              vm.shouldDisablePrint = false;
+           }
             else
             {
               vm.message = 'User details not found';

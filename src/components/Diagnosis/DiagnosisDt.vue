@@ -173,118 +173,8 @@ export default{
       this.shouldRender = true;
       }
     }
-
-    //  vm.refinedTest = {
-    //   info:[
-    //     {
-    //       category:'blood',
-    //       dgid:"dgid1",
-    //       testname: 'test1',
-    //       price:10
-    //     },
-    //     {
-    //       category:'blood',
-    //       dgid:"dgid2",
-    //       testname: 'test2',
-    //       price:20
-    //     },
-    //      {
-    //       category:'blood',
-    //       dgid:"dgid456",
-    //       testname: 'test1a',
-    //       price:30
-    //     },
-    //     {
-    //       category:'blood',
-    //       dgid:"dgid324",
-    //       testname: 'test2a',
-    //       price:40
-    //     },
-    //      {
-    //       category:'blood',
-    //       dgid:"dgid45",
-    //       testname: 'test1b',
-    //       price:50
-    //     },
-    //     {
-    //       category:'blood',
-    //       dgid:"dgid65",
-    //       testname: 'test2b',
-    //       price:60
-    //     },
-    //      {
-    //       category:'blood',
-    //       dgid:"dgid11324",
-    //       testname: 'test2a',
-    //       price:70
-    //     },
-    //      {
-    //       category:'blood',
-    //       dgid:"dgid1145",
-    //       testname: 'test1b',
-    //       price:80
-    //     },
-    //     {
-    //       category:'blood',
-    //       dgid:"dgid2265",
-    //       testname: 'test2b',
-    //       price:90
-    //     },
-    //     {
-    //       category:'misc',
-    //       dgid:"dgid3",
-    //       testname: 'test11',
-    //       price:100
-    //     },
-    //     {
-    //       category:'misc',
-    //       dgid:"dgid4",
-    //       testname: 'test22',
-    //       price:110
-    //     },
-    //     {
-    //       category:'scan',
-    //       dgid:"dgid5",
-    //       testname: 'test111',
-    //       price:120
-    //     },
-    //     {
-    //       category:'scan',
-    //       dgid:"dgid6",
-    //       testname: 'test222',
-    //       price:130
-    //     },
-    //   ],
-    // }
-
-    // for(let i = 0; i< vm.refinedTest.info.length; i++) {
-    //   if (vm.refinedTest.info[i].category == "scan") {
-    //     vm.scanCategories.push(vm.refinedTest.info[i]);
-    //   }
-    //   if (vm.refinedTest.info[i].category == "misc") {
-    //     vm.miscCategories.push(vm.refinedTest.info[i]);
-    //   }
-    //   if (vm.refinedTest.info[i].category == "blood") {
-    //      vm.bloodCategories.push(vm.refinedTest.info[i]);
-    //   }
-    // }
   },
-  computed: {
-    // totalAmount() {
-    //     let vm = this;
-    //     console.log(vm.refinedTest.info.length);
-    //     for (let i = 0; i< vm.refinedTest.info.length; i++)
-    //     {
-    //         for (let j = 0; j < vm.checkedProducts.length; j++) {
-    //             if (vm.checkedProducts[j] == vm.refinedTest.info[i].dgid) {
-    //                 vm.totalPrice = vm.totalPrice + vm.refinedTest.info[i].price;
-    //             }
-    //         }
-    //      }
 
-    //     return vm.totalPrice;
-    // }
-  },
   data(){
     return{
         message:'Click search for existing user and click register for new user',
@@ -329,6 +219,9 @@ export default{
         vm.scanCategories = [];
         vm.totalPrice = 0;
         vm.takenAmount = 0;
+        vm.shouldShow = false;
+        vm.shouldGetDiagnosisInfo  = false;
+
         let api = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + this.patientId;
           await axios.get(api)
           .then(response => {
@@ -410,6 +303,13 @@ export default{
         vm.user.address = '';
         vm.user.sex = 'Select Sex';
         vm.user.diagnosisdoctor = 'Select Doctor';
+        // vm.shouldShow = false;
+        // vm.checkedProducts = [];
+        // vm.bloodCategories = [];
+        // vm.miscCategories = [];
+        // vm.scanCategories = [];
+        // vm.totalPrice = 0;
+        // vm.takenAmount = 0;
       },
       totalSum() {
         let vm = this;

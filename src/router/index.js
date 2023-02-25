@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginPage from '../components/Administration/LoginPage.vue';
 import NotFound from '../components/Administration/NotFound.vue';
 import OpHome from '../components/Op/OpHome.vue';
+import PrintPatient from '../components/Op/PrintPatient.vue';
 import DoctorHome from '../components/Doctor/DoctorHome.vue';
 import PatientInfo from '../components/Doctor/PatientInfo.vue';
 import ScanHome from '../components/Doctor/ScanHome.vue';
@@ -27,6 +28,11 @@ const routes = [
     path: '/ophome',
     name: 'ophome',
     component: OpHome
+  },
+  {
+    path: '/print',
+    name: 'print',
+    component: PrintPatient
   },
   {
     path: '/doctorhome',
