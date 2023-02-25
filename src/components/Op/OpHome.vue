@@ -395,7 +395,7 @@ export default{
 
             await axios.post(api, data)
               .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 if (response != null && response.data != null && response.data.pid != null) {
                   vm.registerUser.pid = response.data.pid;
                   vm.registerSuccess = true;

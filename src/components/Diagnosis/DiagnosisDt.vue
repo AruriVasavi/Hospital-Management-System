@@ -5,6 +5,11 @@
         <div class="my-2" v-if = "shouldRender">
           <div style="margin:10px;">
               <h1> Hello diagnosis!! </h1>
+
+               <div class="alert alert-success" v-if="paymentSuccess" role="alert">
+                     Paid Successfully!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+               </div>
                   <div style="background-color:red" v-for="item of listOfTests" :key="item">{{item}}</div>
                   <div class="container" style="width:500px;height:100px;">
                       <form class="d-flex">
@@ -118,21 +123,21 @@
                       <div class="modal-body">
                           <p> Total Amount: {{totalPrice}} </p>
                           <form class="row g-3">
-                            <div class="form-group  mb-3 mt-3">
+                            <!-- <div class="form-group  mb-3 mt-3">
                               <input type="checkbox" class="form-check-input" style="margin-right:10px;"  v-model="isActualAmountSameasTakenAmount"> Amount received is same as actual amount
-                            </div>
+                            </div> -->
                               <div class="form-group row mb-3 mt-3">
                                 <label for="name" class="col-sm-4 col-form-label">Amount Received</label>
                                   <div class="col-sm-8">
-                                    <input v-if="isActualAmountSameasTakenAmount" :disabled = "isActualAmountSameasTakenAmount" v-model = "takenAmount" type="number" class="form-control" :placeholder="totalPrice">
-                                    <input v-else  v-model = "takenAmount" type="number" class="form-control" placeholder="Amount Received">
+                                    <!-- <input v-if="isActualAmountSameasTakenAmount" :disabled = "isActualAmountSameasTakenAmount" v-model = "takenAmount" type="number" class="form-control" :placeholder="totalPrice"> -->
+                                    <input v-model = "takenAmount" type="number" class="form-control">
                                   </div>
                               </div>
                           </form>
                       </div>
                       <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Save changes</button>
+                          <button type="button" class="btn" style="border: 1px solid teal" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn" style="background-color:teal;color:white" @click = "savePatientDiagnosisHis()">Collect Payment</button>
                       </div>
                   </div>
               </div>
@@ -148,6 +153,7 @@
 </template>
 <script>
 import HeaderBar from '../UIComponents/HeaderBar.vue';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js';
 import axios from "axios";
 export default{
   name: 'DiagnosisDt',
@@ -156,7 +162,7 @@ export default{
   },
 
   mounted() {
-    let vm = this;
+   // let vm = this;
     let userinfo = localStorage.getItem("user-info");
     let role = '';
     let userObj = {};
@@ -168,100 +174,100 @@ export default{
       }
     }
 
-     vm.refinedTest = {
-      info:[
-        {
-          category:'blood',
-          dgid:"dgid1",
-          testname: 'test1',
-          price:10
-        },
-        {
-          category:'blood',
-          dgid:"dgid2",
-          testname: 'test2',
-          price:20
-        },
-         {
-          category:'blood',
-          dgid:"dgid456",
-          testname: 'test1a',
-          price:30
-        },
-        {
-          category:'blood',
-          dgid:"dgid324",
-          testname: 'test2a',
-          price:40
-        },
-         {
-          category:'blood',
-          dgid:"dgid45",
-          testname: 'test1b',
-          price:50
-        },
-        {
-          category:'blood',
-          dgid:"dgid65",
-          testname: 'test2b',
-          price:60
-        },
-         {
-          category:'blood',
-          dgid:"dgid11324",
-          testname: 'test2a',
-          price:70
-        },
-         {
-          category:'blood',
-          dgid:"dgid1145",
-          testname: 'test1b',
-          price:80
-        },
-        {
-          category:'blood',
-          dgid:"dgid2265",
-          testname: 'test2b',
-          price:90
-        },
-        {
-          category:'misc',
-          dgid:"dgid3",
-          testname: 'test11',
-          price:100
-        },
-        {
-          category:'misc',
-          dgid:"dgid4",
-          testname: 'test22',
-          price:110
-        },
-        {
-          category:'scan',
-          dgid:"dgid5",
-          testname: 'test111',
-          price:120
-        },
-        {
-          category:'scan',
-          dgid:"dgid6",
-          testname: 'test222',
-          price:130
-        },
-      ],
-    }
+    //  vm.refinedTest = {
+    //   info:[
+    //     {
+    //       category:'blood',
+    //       dgid:"dgid1",
+    //       testname: 'test1',
+    //       price:10
+    //     },
+    //     {
+    //       category:'blood',
+    //       dgid:"dgid2",
+    //       testname: 'test2',
+    //       price:20
+    //     },
+    //      {
+    //       category:'blood',
+    //       dgid:"dgid456",
+    //       testname: 'test1a',
+    //       price:30
+    //     },
+    //     {
+    //       category:'blood',
+    //       dgid:"dgid324",
+    //       testname: 'test2a',
+    //       price:40
+    //     },
+    //      {
+    //       category:'blood',
+    //       dgid:"dgid45",
+    //       testname: 'test1b',
+    //       price:50
+    //     },
+    //     {
+    //       category:'blood',
+    //       dgid:"dgid65",
+    //       testname: 'test2b',
+    //       price:60
+    //     },
+    //      {
+    //       category:'blood',
+    //       dgid:"dgid11324",
+    //       testname: 'test2a',
+    //       price:70
+    //     },
+    //      {
+    //       category:'blood',
+    //       dgid:"dgid1145",
+    //       testname: 'test1b',
+    //       price:80
+    //     },
+    //     {
+    //       category:'blood',
+    //       dgid:"dgid2265",
+    //       testname: 'test2b',
+    //       price:90
+    //     },
+    //     {
+    //       category:'misc',
+    //       dgid:"dgid3",
+    //       testname: 'test11',
+    //       price:100
+    //     },
+    //     {
+    //       category:'misc',
+    //       dgid:"dgid4",
+    //       testname: 'test22',
+    //       price:110
+    //     },
+    //     {
+    //       category:'scan',
+    //       dgid:"dgid5",
+    //       testname: 'test111',
+    //       price:120
+    //     },
+    //     {
+    //       category:'scan',
+    //       dgid:"dgid6",
+    //       testname: 'test222',
+    //       price:130
+    //     },
+    //   ],
+    // }
 
-    for(let i = 0; i< vm.refinedTest.info.length; i++) {
-      if (vm.refinedTest.info[i].category == "scan") {
-        vm.scanCategories.push(vm.refinedTest.info[i]);
-      }
-      if (vm.refinedTest.info[i].category == "misc") {
-        vm.miscCategories.push(vm.refinedTest.info[i]);
-      }
-      if (vm.refinedTest.info[i].category == "blood") {
-         vm.bloodCategories.push(vm.refinedTest.info[i]);
-      }
-    }
+    // for(let i = 0; i< vm.refinedTest.info.length; i++) {
+    //   if (vm.refinedTest.info[i].category == "scan") {
+    //     vm.scanCategories.push(vm.refinedTest.info[i]);
+    //   }
+    //   if (vm.refinedTest.info[i].category == "misc") {
+    //     vm.miscCategories.push(vm.refinedTest.info[i]);
+    //   }
+    //   if (vm.refinedTest.info[i].category == "blood") {
+    //      vm.bloodCategories.push(vm.refinedTest.info[i]);
+    //   }
+    // }
   },
   computed: {
     // totalAmount() {
@@ -293,6 +299,8 @@ export default{
         scanCategories:[],
         checkedProducts:[],
         totalPrice:0,
+        takenAmount:0,
+        paymentSuccess:false,
         user: {
             name: '',
             age:1,
@@ -315,6 +323,12 @@ export default{
      async searchPatient()
       {
         let vm = this;
+        vm.checkedProducts = [];
+        vm.bloodCategories = [];
+        vm.miscCategories = [];
+        vm.scanCategories = [];
+        vm.totalPrice = 0;
+        vm.takenAmount = 0;
         let api = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + this.patientId;
           await axios.get(api)
           .then(response => {
@@ -357,39 +371,32 @@ export default{
         if(vm.shouldGetDiagnosisInfo){
         vm.listofTests = [];
         vm.testInfo = [];
-        let a = {};
+        //let a = {};
           let api = 'http://localhost/WebApplication1/api/Diagnosis';
           await axios.get(api)
           .then(response => {
             if (response != null && response.data != null)
             {
-                //console.log(response.data);
-                for (var key in response.data) {
-                   // console.log(key);
-                    vm.listofTests.push(key);
-                    //console.log(vm.listofTests.length);
-                    for(var i = 0;i < vm.listofTests.length;i++){
-                       console.log(vm.listofTests[i].dgid);
-                        console.log(vm.listofTests[i].testname);
-                        console.log(vm.listofTests[i].price);
-
-                        a =     {
-                                    cat: key,
-                                    dgid: vm.listofTests[i].dgid,
-                                    testname: vm.listofTests[i].testname,
-                                    price: vm.listofTests[i].price
-                                }
-                        vm.testInfo.push(a);
-                    }
-
+              console.log(response.data);
+                vm.refinedTest = response.data;
+                for(let i = 0; i< vm.refinedTest.Info.length; i++) {
+                  if (vm.refinedTest.Info[i].categoryName == "scan") {
+                    vm.scanCategories.push(vm.refinedTest.Info[i]);
+                  }
+                  if (vm.refinedTest.Info[i].categoryName == "misc") {
+                    vm.miscCategories.push(vm.refinedTest.Info[i]);
+                  }
+                  if (vm.refinedTest.Info[i].categoryName == "blood") {
+                    vm.bloodCategories.push(vm.refinedTest.Info[i]);
+                  }
                 }
+
+                vm.scanCategories.forEach(a => {
+                  console.log(a.testname);
+                })
+
                 vm.shouldShow = true;
-                // vm.testInfo.forEach(a => console.log(a));
             }
-
-           // console.log('outside');
-            //console.log(vm.listofTests);
-
          })
         }
         vm.patientId = '';
@@ -407,15 +414,57 @@ export default{
       totalSum() {
         let vm = this;
         vm.totalPrice = 0;
-        for (let i = 0; i< vm.refinedTest.info.length; i++){
+        for (let i = 0; i< vm.refinedTest.Info.length; i++){
         for (let j = 0; j < vm.checkedProducts.length; j++) {
-            if (vm.checkedProducts[j] == vm.refinedTest.info[i].dgid) {
-                vm.totalPrice = vm.totalPrice + vm.refinedTest.info[i].price;
-                console.log(vm.totalPrice);
+            if (vm.checkedProducts[j] == vm.refinedTest.Info[i].dgid) {
+                vm.totalPrice = vm.totalPrice + vm.refinedTest.Info[i].price;
+                //console.log(vm.totalPrice);
             }
         }
         }
+
+        vm.takenAmount = vm.totalPrice;
+      },
+
+    async savePatientDiagnosisHis(){
+
+      //console.log(this.checkedProducts.join());
+
+      //let price = 0;
+
+      // let cPrice = parseInt(this.takenAmount);
+      // console.log("cPrice: " + cPrice);
+      // if (cPrice > 0) {
+      //   price = cPrice;
+      // }
+      // else {
+      //   price = this.totalPrice;
+      // }
+      // console.log(this.takenAmount);
+      // console.log(this.totalPrice);
+      let his = {
+        pid: this.user.pid,
+        totalprice: this.takenAmount,
+        dgidslist: this.checkedProducts.join(),
+        actualbill: this.totalPrice
       }
+
+      let api = 'http://localhost/WebApplication1/api/DiagnosisPatientsHis';
+          await axios.post(api, his)
+          .then(response => {
+            console.log(response);
+            if (response != null && response.data != null && response.status == 200)
+            {
+               this.paymentSuccess = true;
+
+                 const collectpaymentModal = document.getElementById('exampleModal');
+                 // console.log(markvisit_modal);
+                  const modal = bootstrap.Modal.getInstance(collectpaymentModal);
+                  modal.hide();
+            }
+         })
+
+    }
   }
 }
 </script>
