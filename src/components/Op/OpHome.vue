@@ -106,6 +106,7 @@
             </div>
             <div class="modal-body">
               <div class="form-group row mb-3 ">
+                    <div v-if="shouldDisplayCollectPaymentError" style="color:red"> Please select valid payment mode </div>
                     <label for="modeofpayment" class="col-sm-4 col-form-label">Mode of payment</label>
                     <div class="col-sm-8">
                       <select v-model = "modeofpayment" class="form-select form-select mb-3" aria-label=".form-select-sm example">
@@ -257,6 +258,7 @@ export default{
       registerFailure: false,
       registerWarning:false,
       shouldDisablePrint: true,
+      shouldDisplayCollectPaymentError:false,
       //databsdismiss:'',
       errors :[],
        registrationErrors:[],
@@ -344,9 +346,9 @@ export default{
           vm.errors.push('DiagnosisDoctor is required');
           vm.registerUser.diagnosisdoctor = '';
         }
-        if (!vm.registerUser.modeofpayment) {
-          vm.errors.push('Mode of payment is required');
-          vm.registerUser.modeofpayment = '';
+        if ( vm.registerUser.modeofpayment.toLowerCase() == 'select mode of payment') {
+          vm.errors.push('Please select the correct mode of payment');
+          vm.registerUser.modeofpayment = 'Select Mode of Payment';
         }
          if (!vm.registerUser.amount) {
           vm.errors.push('Amount is required');
@@ -540,13 +542,22 @@ export default{
         let vm = this;
         let api = 'http://localhost/WebApplication1/api/PatientVisitHis';
 
+        if (vm.modeofpayment.toLowerCase() == 'select mode of payment') {
+         vm.shouldDisplayCollectPaymentError = true;
+        }
+
         let data = {
           pid: vm.user.pid,
           ispaid: 1,
           modeofpayment: vm.modeofpayment,
           amount: vm.amount
         }
-       await axios.post(api, data)
+
+
+      if (vm.modeofpayment.toLowerCase() != 'select mode of payment')
+      {
+        vm.shouldDisplayCollectPaymentError = false;
+        await axios.post(api, data)
         .then(response => {
           if (response != null && response.status == 200) {
                vm.user.daysFromLastVisit = 0;
@@ -560,6 +571,11 @@ export default{
                vm.user.daysFromLastPayment++;
           }
         }).catch(error => { vm.shouldShowErrorMessage = true; console.log(error) });
+
+        vm.modeofpayment = 'Select Mode of Payment';
+        vm.amount = 300;
+
+      }
       }
     }
 }
