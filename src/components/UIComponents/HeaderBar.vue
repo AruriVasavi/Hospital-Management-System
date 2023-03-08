@@ -2,7 +2,7 @@
 <div>
     <nav class="navbar navbar-light " style="background-color: teal;color:white">
       <div class="container-fluid">
-        <a class="navbar-brand" style="color:white">Hospital Management System</a>
+        <a class="navbar-brand" style="color:white">Satish Nursing Home</a>
         <div class="d-flex">
           <!-- <router-link  to="/register" style="text-decoration:none;margin-right:10px">Register</router-link> -->
           <div v-if="user == null"> <router-link  to="/login" style="text-decoration:none;margin-right:50px">Login</router-link> </div>

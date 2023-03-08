@@ -14,7 +14,7 @@
                   <div class="container" style="width:500px;height:100px;">
                       <form class="d-flex">
                       <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
-                      <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
+                      <button class="btn" :disabled="!patientId" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
                       </form>
                   </div>
                    <div class="container-fluid">

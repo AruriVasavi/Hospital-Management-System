@@ -18,7 +18,7 @@
       <div class="container" style="width:500px;height:100px">
         <form class="d-flex">
           <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
-          <button class="btn" @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
+          <button class="btn" :disabled="!patientId"  @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
           <button class="btn btn-primary" style="color:white;margin-left:7px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</button>
           <button :disabled="shouldDisablePrint"  class="btn btn-success " style="color:white;margin-left:7px;"  type="button" @click = "print()">Print</button>
         </form>
@@ -126,7 +126,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-danger" @click="collectPayment()">Save changes</button>
+              <button type="button" class="btn btn-primary" style="color:white" @click="collectPayment()">Save changes</button>
             </div>
           </div>
         </div>
@@ -466,10 +466,13 @@ export default{
       {
         let vm = this;
         vm.shouldDisablePrint = true;
+
+        if (this.patientId.trim()) {
         let api = 'http://localhost/WebApplication1/api/PatientRegistration/?uniqID=' + this.patientId;
 
           await axios.get(api)
           .then(response => {
+            console.log(response);
             if (response != null && response.data != null)
             {
               vm.user.pid = response.data.pid;
@@ -502,10 +505,11 @@ export default{
               vm.onGetPatientReset();
             }
           }).catch(error => {
+            console.log("error from ophome seach");
             console.log(error.response);
             vm.onGetPatientReset();
           });
-
+        }
           vm.patientId = '';
       },
 
