@@ -10,3 +10,9 @@ https://www.youtube.com/watch?v=blGp6vslw7s
 https://therichpost.com/vue-3-bootstrap-5-toasts-push-notifications-working-demo/
 
 https://stackoverflow.com/questions/52152342/get-the-list-of-all-selected-check-boxes-with-vue-js
+
+https://datatables.net/examples/ajax/null_data_source.html
+
+https://stackoverflow.com/questions/69301906/what-is-the-difference-between-declaring-variables-in-vue
+
+https://stackoverflow.com/questions/73134550/how-do-you-get-variables-from-the-setup-script-in-vue3

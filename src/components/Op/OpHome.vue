@@ -15,15 +15,17 @@
         User already registered
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-      <div class="container" style="width:500px;height:100px">
+      <div class="container" style="width:1000px;height:40px;display: flex;justify-content: center;">
         <form class="d-flex">
-          <input class="form-control me-2"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
+          <input class="form-control me-2" style="width:400px;"  v-model= "patientId"  type="search" placeholder="Enter phonenumber to search..." aria-label="Search">
           <button class="btn" :disabled="!patientId"  @click="searchPatient()" style="background-color:teal;color:white" type="button">Search</button>
           <button class="btn btn-primary" style="color:white;margin-left:7px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</button>
           <button :disabled="shouldDisablePrint"  class="btn btn-success " style="color:white;margin-left:7px;"  type="button" @click = "print()">Print</button>
+          <button class="btn"  @click="gotoIp()" style="background-color:teal;color:white; margin-left:7px;" type="button">IP</button>
+
         </form>
       </div>
-      <div class="container-fluid">
+      <div class="container-fluid" style="margin-top:50px;">
           <table class="table table-hover table-bordered">
               <thead>
                 <tr>
@@ -117,7 +119,7 @@
                           <option value="None">None</option>
                       </select>
                     </div>
-                  </div>
+              </div>
                    <div class="form-group row mb-3">
                     <label for="Amount" class="col-sm-4 col-form-label">Amount</label>
                     <div class="col-sm-8">
@@ -253,7 +255,7 @@ export default{
   },
   data() {
     return {
-      message:'Click search for existing user and click register for new user',
+      message:'Click search for existing user or click register for new user',
       registerSuccess: false,
       registerFailure: false,
       registerWarning:false,
@@ -576,6 +578,10 @@ export default{
         vm.amount = 300;
 
       }
+      },
+      gotoIp(){
+         const routeData = this.$router.resolve({name: 'iphome'});
+        window.open(routeData.href, '_blank');
       }
     }
 }

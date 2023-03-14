@@ -8,6 +8,7 @@ import DoctorHome from '../components/Doctor/DoctorHome.vue';
 import PatientInfo from '../components/Doctor/PatientInfo.vue';
 import ScanHome from '../components/Doctor/ScanHome.vue';
 import DiagnosisDt from '../components/Diagnosis/DiagnosisDt.vue';
+import IpHome from '../components/Op/IpHome.vue';
 const routes = [
   {
     path: '/',
@@ -53,6 +54,11 @@ const routes = [
     path: '/diagnosishome',
     name: 'diagnosishome',
     component:DiagnosisDt
+  },
+  {
+    path: '/iphome',
+    name: 'iphome',
+    component:IpHome
   },
   {
     path: '/about',
